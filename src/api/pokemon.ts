@@ -1,6 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useQuery,
+  type InfiniteData,
+} from "@tanstack/react-query";
 import { baseFetch } from "./baseFetch";
 import type { IPaginatedResponse, IPokemonListItem } from "./types";
+import { DEFAULT_PAGE_SIZE } from "~/hooks/usePagination";
 
 /**
  * Get All Pokemon
@@ -16,7 +21,7 @@ export interface IGetPokemonListResponse extends IPaginatedResponse {
 }
 
 export const useGetPokemonList = (params: IGetPokemonListParams = {}) => {
-  const { limit = 20, offset = 0 } = params;
+  const { limit = DEFAULT_PAGE_SIZE, offset = 0 } = params;
 
   return useQuery<IGetPokemonListResponse>({
     queryKey: ["pokemon-list", limit, offset],
@@ -24,6 +29,33 @@ export const useGetPokemonList = (params: IGetPokemonListParams = {}) => {
       baseFetch<IGetPokemonListResponse>(
         `pokemon?limit=${limit}&offset=${offset}`,
       ),
+  });
+};
+
+export const useGetPokemonListInfinite = () => {
+  const limit = DEFAULT_PAGE_SIZE;
+
+  return useInfiniteQuery<
+    IGetPokemonListResponse,
+    Error,
+    InfiniteData<IGetPokemonListResponse>,
+    [_key: string],
+    number
+  >({
+    queryKey: ["pokemon-list"],
+    queryFn: ({ pageParam }) =>
+      baseFetch<IGetPokemonListResponse>(
+        `pokemon?limit=${limit}&offset=${pageParam * limit}`,
+      ),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, _allPages, lastPageParam) => {
+      const totalCount = lastPage.count;
+      const shownCount = limit * lastPageParam;
+      if (shownCount + limit > totalCount) {
+        return undefined;
+      }
+      return lastPageParam + 1;
+    },
   });
 };
 

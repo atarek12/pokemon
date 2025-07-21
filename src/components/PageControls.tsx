@@ -1,62 +1,39 @@
-import { Pagination, ButtonGroup, IconButton, HStack } from "@chakra-ui/react";
-import { Link } from "@tanstack/react-router";
 import React from "react";
-import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
+import { PokemonList } from "./PokemonList";
+import { Grid, Skeleton, SkeletonText, Stack } from "@chakra-ui/react";
+import { PaginationButtons } from "./PaginationButtons";
+import { useGetPokemonList } from "~/api/pokemon";
+import { usePagination } from "~/hooks/usePagination";
 
-interface PageControlsProps {
-  totalCount: number;
-  currentPage: number;
-}
+interface PageControlsProps {}
 
-export const PageControls: React.FC<PageControlsProps> = ({
-  totalCount,
-  currentPage,
-}) => {
+export const PageControls: React.FC<PageControlsProps> = ({}) => {
+  const { limit, offset, page } = usePagination();
+  const { data, isLoading, isError } = useGetPokemonList({ limit, offset });
+
+  if (isLoading) {
+    return (
+      <Grid templateColumns="repeat(auto-fill, minmax(250px, 1fr))" gap="16px">
+        {Array(8)
+          .fill(0)
+          .map((_, index) => (
+            <Stack key={index} gap="6">
+              <Skeleton height="200px" />
+              <SkeletonText noOfLines={2} />
+            </Stack>
+          ))}
+      </Grid>
+    );
+  }
+
+  if (!data || isError) {
+    return "No Data";
+  }
+
   return (
-    <Pagination.Root
-      count={totalCount}
-      pageSize={20}
-      defaultPage={1}
-      page={currentPage}
-      display="flex"
-      flexDir="column"
-      alignItems="center"
-      justifyItems="center"
-    >
-      <ButtonGroup variant="subtle" size="sm">
-        <Pagination.PrevTrigger asChild>
-          <IconButton asChild>
-            <Link from="/" search={(prev) => ({ page: prev.page - 1 })}>
-              <LuChevronLeft />
-            </Link>
-          </IconButton>
-        </Pagination.PrevTrigger>
-
-        <Pagination.Items
-          render={(page) => (
-            <IconButton
-              variant={{ base: "subtle", _selected: "solid" }}
-              asChild
-            >
-              <Link from="/" search={{ page: page.value }}>
-                {page.value}
-              </Link>
-            </IconButton>
-          )}
-        />
-
-        <Pagination.NextTrigger asChild>
-          <IconButton asChild>
-            <Link from="/" search={(prev) => ({ page: prev.page + 1 })}>
-              <LuChevronRight />
-            </Link>
-          </IconButton>
-        </Pagination.NextTrigger>
-      </ButtonGroup>
-      <HStack fontSize="14px" color="gray.500">
-        Page
-        <Pagination.PageText format="compact" />
-      </HStack>
-    </Pagination.Root>
+    <Stack spaceY="20px" pb="60px">
+      <PokemonList pokemons={data.results} />
+      <PaginationButtons totalCount={data.count} currentPage={page} />;
+    </Stack>
   );
 };

@@ -5,11 +5,19 @@ import {
   PaginationModeEnum,
   usePaginationModeStore,
 } from "~/context/pagination-mode-context";
+import { usePagination } from "~/hooks/usePagination";
 
 interface AppHeaderProps {}
 
 export const AppHeader: React.FC<AppHeaderProps> = () => {
   const { paginationMode, togglePaginationMode } = usePaginationModeStore();
+  const { setPage } = usePagination();
+
+  const togglePagination = () => {
+    togglePaginationMode();
+    setPage(1);
+  };
+
   return (
     <Box as="header" p="40px">
       <VStack spaceY="16px">
@@ -29,7 +37,7 @@ export const AppHeader: React.FC<AppHeaderProps> = () => {
                 ? "solid"
                 : "outline"
             }
-            onClick={togglePaginationMode}
+            onClick={togglePagination}
           >
             Page Controls
           </Button>
@@ -39,7 +47,7 @@ export const AppHeader: React.FC<AppHeaderProps> = () => {
                 ? "solid"
                 : "outline"
             }
-            onClick={togglePaginationMode}
+            onClick={togglePagination}
           >
             Infinite Scroll
           </Button>
