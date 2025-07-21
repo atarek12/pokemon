@@ -5,6 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import { globalIgnores } from 'eslint/config'
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import pluginRouter from '@tanstack/eslint-plugin-router'
 
 export default tseslint.config([
   globalIgnores(['dist']),
@@ -15,7 +16,8 @@ export default tseslint.config([
       tseslint.configs.recommended,
       reactHooks.configs['recommended-latest'],
       reactRefresh.configs.vite,
-			eslintPluginPrettierRecommended
+			eslintPluginPrettierRecommended,
+			pluginRouter.configs['flat/recommended'],
     ],
     languageOptions: {
       ecmaVersion: 2020,

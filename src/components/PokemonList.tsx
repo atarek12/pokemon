@@ -1,19 +1,15 @@
 import { Card, Grid, Image } from "@chakra-ui/react";
 import React from "react";
-import { useGetPokemonList } from "~/api/pokemon";
+import type { IPokemonListItem } from "~/api/types";
 
-interface PokemonListProps {}
+interface PokemonListProps {
+  pokemons: IPokemonListItem[];
+}
 
-export const PokemonList: React.FC<PokemonListProps> = ({}) => {
-  const { data, isLoading } = useGetPokemonList();
-
-  if (isLoading) return "isLoading";
-
-  if (!data) return "No Data";
-
+export const PokemonList: React.FC<PokemonListProps> = ({ pokemons }) => {
   return (
-    <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap="16px">
-      {data.results.map((pokemon) => {
+    <Grid templateColumns="repeat(auto-fill, minmax(250px, 1fr))" gap="16px">
+      {pokemons.map((pokemon) => {
         const id = pokemon.url.split("/").at(-2);
         return (
           <Card.Root key={id} overflow="hidden">
