@@ -16,7 +16,9 @@ export const AppWrapper: React.FC<AppWrapperProps> = ({ children }) => {
   return (
     <Box minHeight="100vh" bg={mode === "controls" ? "blue.50" : "green.50"}>
       <AppHeader toggleMode={toggleMode} mode={mode} />
-      {children}
+      <Box maxW="1200px" mx="auto" px="16px">
+        {children}
+      </Box>
     </Box>
   );
 };
