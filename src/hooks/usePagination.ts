@@ -1,6 +1,6 @@
 import { useNavigate, useSearch } from "@tanstack/react-router";
 
-const DEFAULT_PAGE_SIZE = 20;
+export const DEFAULT_PAGE_SIZE = 20;
 
 export function usePagination() {
   const { page } = useSearch({ from: "/" });

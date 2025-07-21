@@ -1,20 +1,15 @@
 import { Box, Button, Heading, HStack, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import { BsLightningChargeFill } from "react-icons/bs";
+import {
+  PaginationModeEnum,
+  usePaginationModeStore,
+} from "~/context/pagination-mode-context";
 
-const PaginationModeMapper = {
-  infinite: "infinite scroll",
-  controls: "page controls",
-} as const;
+interface AppHeaderProps {}
 
-export type PaginationModeType = keyof typeof PaginationModeMapper;
-
-interface AppHeaderProps {
-  toggleMode: () => void;
-  mode: PaginationModeType;
-}
-
-export const AppHeader: React.FC<AppHeaderProps> = ({ toggleMode, mode }) => {
+export const AppHeader: React.FC<AppHeaderProps> = () => {
+  const { paginationMode, togglePaginationMode } = usePaginationModeStore();
   return (
     <Box as="header" p="40px">
       <VStack spaceY="16px">
@@ -25,20 +20,26 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ toggleMode, mode }) => {
           </HStack>
         </Heading>
 
-        <Text>
-          Discover and explore Pokemon with {PaginationModeMapper[mode]}
-        </Text>
+        <Text>Discover and explore Pokemon with {paginationMode}</Text>
 
         <HStack>
           <Button
-            variant={mode === "controls" ? "solid" : "outline"}
-            onClick={toggleMode}
+            variant={
+              paginationMode === PaginationModeEnum.controls
+                ? "solid"
+                : "outline"
+            }
+            onClick={togglePaginationMode}
           >
             Page Controls
           </Button>
           <Button
-            variant={mode === "infinite" ? "solid" : "outline"}
-            onClick={toggleMode}
+            variant={
+              paginationMode === PaginationModeEnum.infinite
+                ? "solid"
+                : "outline"
+            }
+            onClick={togglePaginationMode}
           >
             Infinite Scroll
           </Button>
