@@ -1,9 +1,10 @@
 import React from "react";
 import { PokemonList } from "./PokemonList";
-import { Grid, Skeleton, SkeletonText, Stack } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import { PaginationButtons } from "./PaginationButtons";
 import { useGetPokemonList } from "~/api/pokemon";
 import { usePagination } from "~/hooks/usePagination";
+import { PokemonListSkeleton } from "./PokemonListSkeleton";
 
 interface PageControlsProps {}
 
@@ -12,18 +13,7 @@ export const PageControls: React.FC<PageControlsProps> = ({}) => {
   const { data, isLoading, isError } = useGetPokemonList({ limit, offset });
 
   if (isLoading) {
-    return (
-      <Grid templateColumns="repeat(auto-fill, minmax(250px, 1fr))" gap="16px">
-        {Array(8)
-          .fill(0)
-          .map((_, index) => (
-            <Stack key={index} gap="6">
-              <Skeleton height="200px" />
-              <SkeletonText noOfLines={2} />
-            </Stack>
-          ))}
-      </Grid>
-    );
+    return <PokemonListSkeleton />;
   }
 
   if (!data || isError) {

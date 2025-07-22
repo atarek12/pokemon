@@ -2,12 +2,17 @@ import { Button, HStack, Stack } from "@chakra-ui/react";
 import React from "react";
 import { PokemonList } from "./PokemonList";
 import { useGetPokemonListInfinite } from "~/api/pokemon";
+import { PokemonListSkeleton } from "./PokemonListSkeleton";
 
 interface InfiniteScrollProps {}
 
 export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({}) => {
-  const { data, isError, isFetching, hasNextPage, fetchNextPage } =
+  const { data, isError, isLoading, isFetching, hasNextPage, fetchNextPage } =
     useGetPokemonListInfinite();
+
+  if (isLoading) {
+    return <PokemonListSkeleton />;
+  }
 
   if (!data || isError) return "No Data";
 
