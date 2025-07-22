@@ -9,7 +9,7 @@ interface FetchErrorProps {
 
 export const FetchError: React.FC<FetchErrorProps> = ({ error, onRetry }) => {
   return (
-    <Stack alignItems="center" justifyContent="center" mt="40px">
+    <Stack alignItems="center" justifyContent="center" pt="40px">
       <Heading as="h2" fontSize="3xl">
         Fetching Error
       </Heading>

@@ -4,7 +4,11 @@ import {
   type InfiniteData,
 } from "@tanstack/react-query";
 import { baseFetch } from "./baseFetch";
-import type { IPaginatedResponse, IPokemonListItem } from "./types";
+import type {
+  IPaginatedResponse,
+  IPokemonInfo,
+  IPokemonListItem,
+} from "./types";
 import { DEFAULT_PAGE_SIZE } from "~/hooks/usePagination";
 
 /**
@@ -64,10 +68,10 @@ export const useGetPokemonListInfinite = () => {
  */
 
 export interface IGetPokemonParams {
-  id: number;
+  id: string;
 }
 
-export interface IGetPokemonResponse {}
+export interface IGetPokemonResponse extends IPokemonInfo {}
 
 export const useGetPokemon = (params: IGetPokemonParams) => {
   const { id } = params;
