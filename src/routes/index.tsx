@@ -8,7 +8,7 @@ import { InfiniteScroll } from "~/components/InfiniteScroll";
 import { PageControls } from "~/components/PageControls";
 
 const productSearchSchema = z.object({
-  page: z.number().catch(1),
+  page: z.number().min(1).max(66).catch(1),
 });
 
 export const Route = createFileRoute("/")({
