@@ -3,18 +3,28 @@ import React from "react";
 import { PokemonList } from "./PokemonList";
 import { useGetPokemonListInfinite } from "~/api/pokemon";
 import { PokemonListSkeleton } from "./PokemonListSkeleton";
+import { FetchError } from "./FetchError";
 
 interface InfiniteScrollProps {}
 
 export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({}) => {
-  const { data, isError, isLoading, isFetching, hasNextPage, fetchNextPage } =
-    useGetPokemonListInfinite();
+  const {
+    data,
+    error,
+    refetch,
+    isLoading,
+    isFetching,
+    hasNextPage,
+    fetchNextPage,
+  } = useGetPokemonListInfinite();
 
   if (isLoading) {
     return <PokemonListSkeleton />;
   }
 
-  if (!data || isError) return "No Data";
+  if (!data || error) {
+    return <FetchError error={error} onRetry={refetch} />;
+  }
 
   const pokemons = data.pages.flatMap((p) => p.results);
 
