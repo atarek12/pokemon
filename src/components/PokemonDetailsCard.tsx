@@ -51,7 +51,7 @@ export const PokemonDetailsCard: React.FC<PokemonDetailsCardProps> = ({
             />
           </Box>
 
-          <HStack>
+          <HStack wrap="wrap">
             {pokemon.types.map((t, i) => (
               <Badge key={i} variant="solid" size="lg">
                 {t.type.name}
@@ -59,7 +59,7 @@ export const PokemonDetailsCard: React.FC<PokemonDetailsCardProps> = ({
             ))}
           </HStack>
 
-          <HStack>
+          <HStack wrap="wrap" justifyContent="center">
             <Box borderRadius="6px" bg="gray.100" w="150px" p="10px">
               <VStack>
                 <HStack>
